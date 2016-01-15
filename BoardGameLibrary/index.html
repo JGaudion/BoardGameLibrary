@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Games Library App</title>
+	<meta charset="utf-8" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+    <div>
+        <h2>All Games</h2>
+        <ul id="games" />
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="gameId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="game" />
+    </div>
+       
+    <script>
+    var uri = 'api/games'; //This needs to match the name of the controller. e.g. api/[myname] links to controller [myname]Controller.cs
+
+    $(document).ready(function () {
+      // Send an AJAX request
+      $.getJSON(uri)
+          .done(function (data) {
+            // On success, 'data' contains a list of products.
+            $.each(data, function (key, item) {
+              // Add a list item for the product.
+              $('<li>', { text: formatItem(item) }).appendTo($('#game'));
+            });
+          })
+        .fail(function (jqXHR, textStatus, err) {
+            alert(err);
+        });
+    });
+
+    function formatItem(item) {
+      return item.Name;
+    }
+
+    function find() {
+      var id = $('#gameId').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+            $('#game').text(formatItem(data));
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#game').text('Error: ' + err);
+          });
+    }
+    </script>
+</body>
+</html>

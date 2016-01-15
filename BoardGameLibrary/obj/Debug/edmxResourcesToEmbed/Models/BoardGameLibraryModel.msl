@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BoardGameLibraryDatabaseModelStoreContainer" CdmEntityContainer="BoardGameLibraryDatabaseEntities">
+    <EntitySetMapping Name="Games">
+      <EntityTypeMapping TypeName="IsTypeOf(BoardGameLibraryDatabaseModel.Game)">
+        <MappingFragment StoreEntitySet="Games">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DifficultyToLearn" ColumnName="DifficultyToLearn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="OwnedById" ColumnName="OwnedById" />
+          <ScalarProperty Name="AtWork" ColumnName="AtWork" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MinNumPlayers" ColumnName="MinNumPlayers" />
+          <ScalarProperty Name="MaxNumPlayers" ColumnName="MaxNumPlayers" />
+          <ScalarProperty Name="PlayTimeHours" ColumnName="PlayTimeHours" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Expansions">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Expansion">
+        <MappingFragment StoreEntitySet="Expansions">
+          <ScalarProperty Name="AtWork" ColumnName="AtWork" />
+          <ScalarProperty Name="OwnedById" ColumnName="OwnedById" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ParentGameId" ColumnName="ParentGameId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Keywords">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Keyword">
+        <MappingFragment StoreEntitySet="Keywords">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Plays">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Play">
+        <MappingFragment StoreEntitySet="Plays">
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Requests">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Request">
+        <MappingFragment StoreEntitySet="Requests">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserOpinions">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.UserOpinion">
+        <MappingFragment StoreEntitySet="UserOpinions">
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="LastPlayed" ColumnName="LastPlayed" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="GameKeywords" TypeName="BoardGameLibraryDatabaseModel.GameKeywords" StoreEntitySet="GameKeywords">
+      <EndProperty Name="Keyword">
+        <ScalarProperty Name="Id" ColumnName="KeywordId" />
+      </EndProperty>
+      <EndProperty Name="Game">
+        <ScalarProperty Name="Id" ColumnName="GameId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserPlays" TypeName="BoardGameLibraryDatabaseModel.UserPlays" StoreEntitySet="UserPlays">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="Play">
+        <ScalarProperty Name="Id" ColumnName="PlayId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Comment">
+        <MappingFragment StoreEntitySet="Comments">
+          <ScalarProperty Name="CommentDetail" ColumnName="CommentDetail" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="UserOpinionId" ColumnName="UserOpinionId" />
+          <ScalarProperty Name="PlayId" ColumnName="PlayId" />
+          <ScalarProperty Name="RequestId" ColumnName="RequestId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

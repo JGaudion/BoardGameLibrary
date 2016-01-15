@@ -1,0 +1,876 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BoardGameLibraryDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CommentDetail" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="GameId" Type="int" />
+          <Property Name="RequestId" Type="int" />
+          <Property Name="PlayId" Type="int" />
+          <Property Name="UserOpinionId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Expansions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ParentGameId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="OwnedById" Type="int" />
+          <Property Name="AtWork" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GameKeywords">
+          <Key>
+            <PropertyRef Name="GameId" />
+            <PropertyRef Name="KeywordId" />
+          </Key>
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="KeywordId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="MinNumPlayers" Type="int" />
+          <Property Name="MaxNumPlayers" Type="int" />
+          <Property Name="PlayTimeHours" Type="float" />
+          <Property Name="AtWork" Type="bit" Nullable="false" />
+          <Property Name="OwnedById" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="DifficultyToLearn" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Keywords">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Plays">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="GameId" Type="int" />
+        </EntityType>
+        <EntityType Name="Requests">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="GameId" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="UserOpinions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="Details" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="UserPlays">
+          <Key>
+            <PropertyRef Name="PlayId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="PlayId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastPlayed" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Comments_To_Games">
+          <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Opinions">
+          <End Role="UserOpinions" Type="Self.UserOpinions" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserOpinions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserOpinionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Plays">
+          <End Role="Plays" Type="Self.Plays" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plays">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="PlayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Requests">
+          <End Role="Requests" Type="Self.Requests" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requests">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="RequestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expansions_To_Games">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="Expansions" Type="Self.Expansions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expansions">
+              <PropertyRef Name="ParentGameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expansions_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Expansions" Type="Self.Expansions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expansions">
+              <PropertyRef Name="OwnedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameKeywords_To_Game">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="GameKeywords" Type="Self.GameKeywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GameKeywords">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameKeywords_To_Keywords">
+          <End Role="Keywords" Type="Self.Keywords" Multiplicity="1" />
+          <End Role="GameKeywords" Type="Self.GameKeywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keywords">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GameKeywords">
+              <PropertyRef Name="KeywordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Games" Type="Self.Games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="OwnedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plays_To_Game">
+          <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
+          <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Plays">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requests_To_Games">
+          <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
+          <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requests">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requests_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requests">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserOpinions_To_Games">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="UserOpinions" Type="Self.UserOpinions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserOpinions">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserOpinions_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserOpinions" Type="Self.UserOpinions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserOpinions">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPlays_To_Plays">
+          <End Role="Plays" Type="Self.Plays" Multiplicity="1" />
+          <End Role="UserPlays" Type="Self.UserPlays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plays">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserPlays">
+              <PropertyRef Name="PlayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPlays_To_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserPlays" Type="Self.UserPlays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserPlays">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BoardGameLibraryDatabaseModelStoreContainer">
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Expansions" EntityType="Self.Expansions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GameKeywords" EntityType="Self.GameKeywords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Keywords" EntityType="Self.Keywords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plays" EntityType="Self.Plays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Requests" EntityType="Self.Requests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserOpinions" EntityType="Self.UserOpinions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPlays" EntityType="Self.UserPlays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comments_To_Games" Association="Self.FK_Comments_To_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Opinions" Association="Self.FK_Comments_To_Opinions">
+            <End Role="UserOpinions" EntitySet="UserOpinions" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Plays" Association="Self.FK_Comments_To_Plays">
+            <End Role="Plays" EntitySet="Plays" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Requests" Association="Self.FK_Comments_To_Requests">
+            <End Role="Requests" EntitySet="Requests" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Users" Association="Self.FK_Comments_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expansions_To_Games" Association="Self.FK_Expansions_To_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Expansions" EntitySet="Expansions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expansions_To_Users" Association="Self.FK_Expansions_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Expansions" EntitySet="Expansions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameKeywords_To_Game" Association="Self.FK_GameKeywords_To_Game">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="GameKeywords" EntitySet="GameKeywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameKeywords_To_Keywords" Association="Self.FK_GameKeywords_To_Keywords">
+            <End Role="Keywords" EntitySet="Keywords" />
+            <End Role="GameKeywords" EntitySet="GameKeywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Users" Association="Self.FK_Games_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plays_To_Game" Association="Self.FK_Plays_To_Game">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Plays" EntitySet="Plays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requests_To_Games" Association="Self.FK_Requests_To_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Requests" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requests_To_Users" Association="Self.FK_Requests_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Requests" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserOpinions_To_Games" Association="Self.FK_UserOpinions_To_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="UserOpinions" EntitySet="UserOpinions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserOpinions_To_Users" Association="Self.FK_UserOpinions_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserOpinions" EntitySet="UserOpinions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPlays_To_Plays" Association="Self.FK_UserPlays_To_Plays">
+            <End Role="Plays" EntitySet="Plays" />
+            <End Role="UserPlays" EntitySet="UserPlays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPlays_To_Users" Association="Self.FK_UserPlays_To_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserPlays" EntitySet="UserPlays" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BoardGameLibraryDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MinNumPlayers" Type="Int32" />
+          <Property Name="MaxNumPlayers" Type="Int32" />
+          <Property Name="PlayTimeHours" Type="Double" />
+          <Property Name="AtWork" Type="Boolean" Nullable="false" />
+          <Property Name="OwnedById" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DifficultyToLearn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Expansions" Relationship="BoardGameLibraryDatabaseModel.FK_Expansions_To_Games" FromRole="Game" ToRole="Expansion" />
+          <NavigationProperty Name="Owner" Relationship="BoardGameLibraryDatabaseModel.FK_Games_To_Users" FromRole="Game" ToRole="User" />
+          <NavigationProperty Name="Requests" Relationship="BoardGameLibraryDatabaseModel.FK_Requests_To_Games" FromRole="Game" ToRole="Request" />
+          <NavigationProperty Name="UserOpinions" Relationship="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Games" FromRole="Game" ToRole="UserOpinion" />
+          <NavigationProperty Name="Keywords" Relationship="BoardGameLibraryDatabaseModel.GameKeywords" FromRole="Game" ToRole="Keyword" />
+          <NavigationProperty Name="Plays" Relationship="BoardGameLibraryDatabaseModel.FK_Plays_To_Game" FromRole="Game" ToRole="Play" />
+          <NavigationProperty Name="Comments" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Games" FromRole="Game" ToRole="Comment" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="BoardGameLibraryDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Games" EntityType="BoardGameLibraryDatabaseModel.Game" />
+          <EntitySet Name="Expansions" EntityType="BoardGameLibraryDatabaseModel.Expansion" />
+          <EntitySet Name="Keywords" EntityType="BoardGameLibraryDatabaseModel.Keyword" />
+          <EntitySet Name="Plays" EntityType="BoardGameLibraryDatabaseModel.Play" />
+          <EntitySet Name="Requests" EntityType="BoardGameLibraryDatabaseModel.Request" />
+          <EntitySet Name="UserOpinions" EntityType="BoardGameLibraryDatabaseModel.UserOpinion" />
+          <EntitySet Name="Users" EntityType="BoardGameLibraryDatabaseModel.User" />
+          <AssociationSet Name="FK_Expansions_To_Games" Association="BoardGameLibraryDatabaseModel.FK_Expansions_To_Games">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Expansion" EntitySet="Expansions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expansions_To_Users" Association="BoardGameLibraryDatabaseModel.FK_Expansions_To_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Expansion" EntitySet="Expansions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Users" Association="BoardGameLibraryDatabaseModel.FK_Games_To_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Game" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requests_To_Games" Association="BoardGameLibraryDatabaseModel.FK_Requests_To_Games">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserOpinions_To_Games" Association="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Games">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="UserOpinion" EntitySet="UserOpinions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requests_To_Users" Association="BoardGameLibraryDatabaseModel.FK_Requests_To_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserOpinions_To_Users" Association="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserOpinion" EntitySet="UserOpinions" />
+          </AssociationSet>
+          <AssociationSet Name="GameKeywords" Association="BoardGameLibraryDatabaseModel.GameKeywords">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Keyword" EntitySet="Keywords" />
+          </AssociationSet>
+          <AssociationSet Name="UserPlays" Association="BoardGameLibraryDatabaseModel.UserPlays">
+            <End Role="Play" EntitySet="Plays" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plays_To_Game" Association="BoardGameLibraryDatabaseModel.FK_Plays_To_Game">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Play" EntitySet="Plays" />
+          </AssociationSet>
+          <EntitySet Name="Comments" EntityType="BoardGameLibraryDatabaseModel.Comment" />
+          <AssociationSet Name="FK_Comments_To_Games" Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Games">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Opinions" Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Opinions">
+            <End Role="UserOpinion" EntitySet="UserOpinions" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Plays" Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Plays">
+            <End Role="Play" EntitySet="Plays" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Requests" Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Requests">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_To_Users" Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Expansion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ParentGameId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="OwnedById" Type="Int32" />
+          <Property Name="AtWork" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ParentGame" Relationship="BoardGameLibraryDatabaseModel.FK_Expansions_To_Games" FromRole="Expansion" ToRole="Game" />
+          <NavigationProperty Name="Owner" Relationship="BoardGameLibraryDatabaseModel.FK_Expansions_To_Users" FromRole="Expansion" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Play">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Players" Relationship="BoardGameLibraryDatabaseModel.UserPlays" FromRole="Play" ToRole="User" />
+          <Property Name="GameId" Type="Int32" />
+          <NavigationProperty Name="Game" Relationship="BoardGameLibraryDatabaseModel.FK_Plays_To_Game" FromRole="Play" ToRole="Game" />
+          <NavigationProperty Name="Comments" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Plays" FromRole="Play" ToRole="Comment" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="GameId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Game" Relationship="BoardGameLibraryDatabaseModel.FK_Requests_To_Games" FromRole="Request" ToRole="Game" />
+          <NavigationProperty Name="User" Relationship="BoardGameLibraryDatabaseModel.FK_Requests_To_Users" FromRole="Request" ToRole="User" />
+          <NavigationProperty Name="Comments" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Requests" FromRole="Request" ToRole="Comment" />
+        </EntityType>
+        <EntityType Name="UserOpinion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="Rating" Type="Int32" />
+          <NavigationProperty Name="Game" Relationship="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Games" FromRole="UserOpinion" ToRole="Game" />
+          <NavigationProperty Name="User" Relationship="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Users" FromRole="UserOpinion" ToRole="User" />
+          <Property Name="Details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Opinions" FromRole="UserOpinion" ToRole="Comment" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastPlayed" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Expansions" Relationship="BoardGameLibraryDatabaseModel.FK_Expansions_To_Users" FromRole="User" ToRole="Expansion" />
+          <NavigationProperty Name="Games" Relationship="BoardGameLibraryDatabaseModel.FK_Games_To_Users" FromRole="User" ToRole="Game" />
+          <NavigationProperty Name="Requests" Relationship="BoardGameLibraryDatabaseModel.FK_Requests_To_Users" FromRole="User" ToRole="Request" />
+          <NavigationProperty Name="UserOpinions" Relationship="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Users" FromRole="User" ToRole="UserOpinion" />
+          <NavigationProperty Name="Plays" Relationship="BoardGameLibraryDatabaseModel.UserPlays" FromRole="User" ToRole="Play" />
+          <NavigationProperty Name="Comments" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Users" FromRole="User" ToRole="Comment" />
+        </EntityType>
+        <Association Name="FK_Expansions_To_Games">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="1" />
+          <End Type="BoardGameLibraryDatabaseModel.Expansion" Role="Expansion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expansion">
+              <PropertyRef Name="ParentGameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expansions_To_Users">
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Expansion" Role="Expansion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expansion">
+              <PropertyRef Name="OwnedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Users">
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="OwnedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requests_To_Games">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserOpinions_To_Games">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="1" />
+          <End Type="BoardGameLibraryDatabaseModel.UserOpinion" Role="UserOpinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserOpinion">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requests_To_Users">
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="BoardGameLibraryDatabaseModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserOpinions_To_Users">
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="BoardGameLibraryDatabaseModel.UserOpinion" Role="UserOpinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserOpinion">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GameKeywords">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="*" />
+          <End Type="BoardGameLibraryDatabaseModel.Keyword" Role="Keyword" Multiplicity="*" />
+        </Association>
+        <Association Name="UserPlays">
+          <End Type="BoardGameLibraryDatabaseModel.Play" Role="Play" Multiplicity="*" />
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Plays_To_Game">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Play" Role="Play" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Play">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="GameId" Type="Int32" />
+          <Property Name="RequestId" Type="Int32" />
+          <Property Name="PlayId" Type="Int32" />
+          <Property Name="UserOpinionId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Game" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Games" FromRole="Comment" ToRole="Game" />
+          <NavigationProperty Name="UserOpinion" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Opinions" FromRole="Comment" ToRole="UserOpinion" />
+          <NavigationProperty Name="Play" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Plays" FromRole="Comment" ToRole="Play" />
+          <NavigationProperty Name="Request" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Requests" FromRole="Comment" ToRole="Request" />
+          <NavigationProperty Name="User" Relationship="BoardGameLibraryDatabaseModel.FK_Comments_To_Users" FromRole="Comment" ToRole="User" />
+          <Property Name="CommentDetail" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Comments_To_Games">
+          <End Type="BoardGameLibraryDatabaseModel.Game" Role="Game" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Opinions">
+          <End Type="BoardGameLibraryDatabaseModel.UserOpinion" Role="UserOpinion" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserOpinion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="UserOpinionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Plays">
+          <End Type="BoardGameLibraryDatabaseModel.Play" Role="Play" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Play">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PlayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Requests">
+          <End Type="BoardGameLibraryDatabaseModel.Request" Role="Request" Multiplicity="0..1" />
+          <End Type="BoardGameLibraryDatabaseModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="RequestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_To_Users">
+          <End Type="BoardGameLibraryDatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="BoardGameLibraryDatabaseModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BoardGameLibraryDatabaseModelStoreContainer" CdmEntityContainer="BoardGameLibraryDatabaseEntities">
+    <EntitySetMapping Name="Games">
+      <EntityTypeMapping TypeName="IsTypeOf(BoardGameLibraryDatabaseModel.Game)">
+        <MappingFragment StoreEntitySet="Games">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DifficultyToLearn" ColumnName="DifficultyToLearn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OwnedById" ColumnName="OwnedById" />
+                <ScalarProperty Name="AtWork" ColumnName="AtWork" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MinNumPlayers" ColumnName="MinNumPlayers" />
+          <ScalarProperty Name="MaxNumPlayers" ColumnName="MaxNumPlayers" />
+          <ScalarProperty Name="PlayTimeHours" ColumnName="PlayTimeHours" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+          <EntitySetMapping Name="Expansions">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Expansion">
+              <MappingFragment StoreEntitySet="Expansions">
+                <ScalarProperty Name="AtWork" ColumnName="AtWork" />
+                <ScalarProperty Name="OwnedById" ColumnName="OwnedById" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ParentGameId" ColumnName="ParentGameId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Keywords">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Keyword">
+              <MappingFragment StoreEntitySet="Keywords">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plays">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Play">
+              <MappingFragment StoreEntitySet="Plays">
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requests">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Request">
+              <MappingFragment StoreEntitySet="Requests">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserOpinions">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.UserOpinion">
+              <MappingFragment StoreEntitySet="UserOpinions">
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="LastPlayed" ColumnName="LastPlayed" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="GameKeywords" TypeName="BoardGameLibraryDatabaseModel.GameKeywords" StoreEntitySet="GameKeywords">
+            <EndProperty Name="Keyword">
+              <ScalarProperty Name="Id" ColumnName="KeywordId" />
+            </EndProperty>
+            <EndProperty Name="Game">
+              <ScalarProperty Name="Id" ColumnName="GameId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserPlays" TypeName="BoardGameLibraryDatabaseModel.UserPlays" StoreEntitySet="UserPlays">
+            <EndProperty Name="User">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="Play">
+              <ScalarProperty Name="Id" ColumnName="PlayId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="BoardGameLibraryDatabaseModel.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="CommentDetail" ColumnName="CommentDetail" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserOpinionId" ColumnName="UserOpinionId" />
+                <ScalarProperty Name="PlayId" ColumnName="PlayId" />
+                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5f0dde4e0ae544349fca94ae86728022" Name="Diagram1">
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Game" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Expansion" Width="1.5" PointX="4.625" PointY="0.625" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Keyword" Width="1.5" PointX="9.875" PointY="0.625" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Play" Width="1.5" PointX="1.875" PointY="6.875" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Request" Width="1.5" PointX="4.875" PointY="5" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.UserOpinion" Width="1.5" PointX="1.875" PointY="0.5" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.User" Width="1.5" PointX="1.875" PointY="4" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Expansions_To_Games" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Expansions_To_Users" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Games_To_Users" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Requests_To_Games" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Games" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Requests_To_Users" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_UserOpinions_To_Users" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.GameKeywords" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.UserPlays" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Plays_To_Game" />
+        <EntityTypeShape EntityType="BoardGameLibraryDatabaseModel.Comment" Width="1.5" PointX="10" PointY="5.375" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Games" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Opinions" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Plays" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Requests" />
+        <AssociationConnector Association="BoardGameLibraryDatabaseModel.FK_Comments_To_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
